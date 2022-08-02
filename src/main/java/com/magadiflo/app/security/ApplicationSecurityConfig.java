@@ -38,6 +38,13 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                 .password(this.passwordEncoder.encode("12345")) //Si queremos trabajar sin encriptar la contraseña (sin usar el passwordEncoder) debemos anteponer el {noop}, ejemplo: "{noop}12345"
                 .roles("STUDENT") //Internamente será: ROLE_STUDENT
                 .build();
-        return new InMemoryUserDetailsManager(magadifloUser);
+
+        UserDetails millaUser = User.builder()
+                .username("milla")
+                .password(this.passwordEncoder.encode("12345"))
+                .roles("ADMIN")
+                .build();
+
+        return new InMemoryUserDetailsManager(magadifloUser, millaUser);
     }
 }
