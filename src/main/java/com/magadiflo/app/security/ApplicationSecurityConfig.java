@@ -32,6 +32,14 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
      * un usuario que no tenga permiso para hacer ACTUALIZACIONES o ELIMINACIONES, sí
      * lo termine realizando.
      */
+
+    /**
+     * ¿Cuándo usar la protección CSRF?
+     * Nuestra recomendación es utilizar la protección CSRF para cualquier
+     * solicitud que pueda ser procesada por un navegador por usuarios normales.
+     * Si solo está creando un servicio que utilizan clientes que no son navegadores,
+     * es probable que desee desactivar la protección CSRF.
+     */
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
