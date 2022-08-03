@@ -22,6 +22,14 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
         this.passwordEncoder = passwordEncoder;
     }
 
+    /**
+     * Atención:
+     * El orden en la que definamos los .antMatchers(...) >>>>>>> SÍ IMPORTA <<<<<<<<
+     * Ya que cuando se haga una petición, evaluará línea por línea los permisos o roles
+     * definidos para cada patrón url, y si colocamos mal el orden podríamos hacer que
+     * un usuario que no tenga permiso para hacer ACTUALIZACIONES o ELIMINACIONES, sí
+     * lo termine realizando.
+     */
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
@@ -32,7 +40,7 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.DELETE, "/management/api/**").hasAuthority(ApplicationUserPermission.COURSE_WRITE.getPermission())
                 .antMatchers(HttpMethod.POST, "/management/api/**").hasAuthority(ApplicationUserPermission.COURSE_WRITE.getPermission())
                 .antMatchers(HttpMethod.PUT, "/management/api/**").hasAuthority(ApplicationUserPermission.COURSE_WRITE.getPermission())
-                .antMatchers(HttpMethod.GET, "/management/api/**").hasAnyRole(ApplicationUserRole.ADMIN.name(), ApplicationUserRole.ADMINTRAINEE.name())
+                .antMatchers("/management/api/**").hasAnyRole(ApplicationUserRole.ADMIN.name(), ApplicationUserRole.ADMINTRAINEE.name())
                 .anyRequest().authenticated()
                 .and()
                 .httpBasic(); //Autenticación básica (Basic Auth), si ingresamos por un navegador mostrará un alert donde se debe especificar username and password
