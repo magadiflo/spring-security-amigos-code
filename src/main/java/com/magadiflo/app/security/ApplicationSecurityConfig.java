@@ -14,6 +14,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 
+import java.util.concurrent.TimeUnit;
+
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true) //Para poder usar las anotaciones @PreAuthorize(...) en los métodos de las APIS
@@ -55,7 +57,10 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                 .loginPage("/login").permitAll() //Indica la url (/login) de la página de inicio de sesión
                 .defaultSuccessUrl("/courses", true) //true, que sí haga forzar la redirección
                 .and()
-                .rememberMe().userDetailsService(this.userDetailsServiceBean()); //rememberMe(), Por defecto a 2 semanas. Si no le agregamos el userDetailsService(...), al hacer login y check en remember me, nos mostrará el error ...IllegalStateException: UserDetailsService is required. (En el tutorial no le agrega eso y funciona normal)
+                .rememberMe() //rememberMe(), Por defecto a 2 semanas.
+                    .userDetailsService(this.userDetailsServiceBean()) // Si no le agregamos el userDetailsService(...), al hacer login y check en remember me, nos mostrará el error ...IllegalStateException: UserDetailsService is required. (En el tutorial no le agrega eso y funciona normal)
+                    .tokenValiditySeconds((int)TimeUnit.DAYS.toSeconds(21))//Cambiamos la duración del remember me a 21 días (convertidos en segundos)
+                    .key("somethingVerySecured12345"); //Usamos una clave propia para cifrar el token del remember me
     }
 
     @Override
