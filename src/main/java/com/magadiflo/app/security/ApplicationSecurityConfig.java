@@ -66,13 +66,16 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 //.httpBasic(); //Autenticación básica (Basic Auth), si ingresamos por un navegador mostrará un alert donde se debe especificar username and password
                 .formLogin() //Autenticación basada en formularios, si ingresamos por un navegador mostrará un formulario de login en la ruta /login (cerrar sesión /logout)
-                .loginPage("/login").permitAll() //Indica la url (/login) de la página de inicio de sesión
-                .defaultSuccessUrl("/courses", true) //true, que sí haga forzar la redirección
+                    .loginPage("/login").permitAll() //Indica la url (/login) de la página de inicio de sesión
+                    .defaultSuccessUrl("/courses", true) //true, que sí haga forzar la redirección
+                    .passwordParameter("password")//Establecemos un name al input de contraseña (default is password)
+                    .usernameParameter("username")//Establecemos un name al input de usuario (default is username)
                 .and()
                 .rememberMe() //rememberMe(), Por defecto a 2 semanas.
-                    .userDetailsService(this.userDetailsServiceBean()) // Si no le agregamos el userDetailsService(...), al hacer login y check en remember me, nos mostrará el error ...IllegalStateException: UserDetailsService is required. (En el tutorial no le agrega eso y funciona normal)
+                    .userDetailsService(this.userDetailsServiceBean()) //Si no le agregamos el userDetailsService(...), al hacer login y check en remember me, nos mostrará el error ...IllegalStateException: UserDetailsService is required. (En el tutorial no le agrega eso y funciona normal)
                     .tokenValiditySeconds((int)TimeUnit.DAYS.toSeconds(21))//Cambiamos la duración del remember me a 21 días (convertidos en segundos)
                     .key("somethingVerySecured12345") //Usamos una clave propia para cifrar el token del remember me
+                    .rememberMeParameter("remember-me") //Establecemos un name al input de recuérdame (default is remember-me)
                 .and()
                 .logout()
                     .logoutUrl("/logout") //Url predeterminada para cerrar sesión
