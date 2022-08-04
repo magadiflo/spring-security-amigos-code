@@ -52,7 +52,8 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 //.httpBasic(); //Autenticación básica (Basic Auth), si ingresamos por un navegador mostrará un alert donde se debe especificar username and password
                 .formLogin() //Autenticación basada en formularios, si ingresamos por un navegador mostrará un formulario de login en la ruta /login (cerrar sesión /logout)
-                .loginPage("/login").permitAll(); //Indica la url (/login) de la página de inicio de sesión
+                .loginPage("/login").permitAll() //Indica la url (/login) de la página de inicio de sesión
+                .defaultSuccessUrl("/courses", true); //true, que sí haga forzar la redirección
     }
 
     @Override

@@ -13,4 +13,9 @@ public class TemplateController {
         return "login"; //login.html
     }
 
+    @GetMapping("/courses")
+    public String getCourses() {
+        return "courses"; //courses.html
+    }
+
 }
