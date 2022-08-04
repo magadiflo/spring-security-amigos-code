@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import java.util.concurrent.TimeUnit;
 
@@ -43,6 +44,17 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
      * Si solo está creando un servicio que utilizan clientes que no son navegadores,
      * es probable que desee desactivar la protección CSRF.
      */
+
+    /**
+     * logoutUrl
+     * La URL que activa el cierre de sesión (default is "/logout").
+     * Si la protección CSRF está habilitada (default), la solicitud también debe ser un POST.
+     * Esto significa que, de forma predeterminada, se requiere POST "/logout" para activar un cierre de sesión.
+     * Si la protección CSRF está deshabilitada, se permite cualquier método HTTP.
+     * Se considera una buena práctica usar HTTP POST en cualquier acción que cambie de estado (es decir, cerrar sesión)
+     * para protegerse contra ataques CSRF. Si realmente desea utilizar HTTP GET, puede utilizar
+     * logoutRequestMatcher(new AntPathRequestMatcher(logoutURL, "GET"));
+     */
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
@@ -60,7 +72,15 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                 .rememberMe() //rememberMe(), Por defecto a 2 semanas.
                     .userDetailsService(this.userDetailsServiceBean()) // Si no le agregamos el userDetailsService(...), al hacer login y check en remember me, nos mostrará el error ...IllegalStateException: UserDetailsService is required. (En el tutorial no le agrega eso y funciona normal)
                     .tokenValiditySeconds((int)TimeUnit.DAYS.toSeconds(21))//Cambiamos la duración del remember me a 21 días (convertidos en segundos)
-                    .key("somethingVerySecured12345"); //Usamos una clave propia para cifrar el token del remember me
+                    .key("somethingVerySecured12345") //Usamos una clave propia para cifrar el token del remember me
+                .and()
+                .logout()
+                    .logoutUrl("/logout") //Url predeterminada para cerrar sesión
+                    .logoutRequestMatcher(new AntPathRequestMatcher("/logout", "GET")) //Porque deshabilitamos la protección CSRF, si la volvemos a habilitar, esta línea debe ser eliminada. Aquí le decimos, cada vez que vaya a la url "/logout" con el método GET que cierre sesión
+                    .clearAuthentication(true)
+                    .invalidateHttpSession(true)
+                    .deleteCookies("JSESSIONID", "remember-me")
+                    .logoutSuccessUrl("/login");
     }
 
     @Override
