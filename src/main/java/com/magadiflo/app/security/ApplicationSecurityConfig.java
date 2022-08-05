@@ -1,18 +1,15 @@
 package com.magadiflo.app.security;
 
+import com.magadiflo.app.auth.ApplicationUserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
-import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import java.util.concurrent.TimeUnit;
@@ -23,9 +20,11 @@ import java.util.concurrent.TimeUnit;
 public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final PasswordEncoder passwordEncoder;
+    private final ApplicationUserService applicationUserService;
 
-    public ApplicationSecurityConfig(PasswordEncoder passwordEncoder) {
+    public ApplicationSecurityConfig(PasswordEncoder passwordEncoder, ApplicationUserService applicationUserService) {
         this.passwordEncoder = passwordEncoder;
+        this.applicationUserService = applicationUserService;
     }
 
     /**
@@ -72,7 +71,7 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                     .usernameParameter("username")//Establecemos un name al input de usuario (default is username)
                 .and()
                 .rememberMe() //rememberMe(), Por defecto a 2 semanas.
-                    .userDetailsService(this.userDetailsServiceBean()) //Si no le agregamos el userDetailsService(...), al hacer login y check en remember me, nos mostrará el error ...IllegalStateException: UserDetailsService is required. (En el tutorial no le agrega eso y funciona normal)
+                    .userDetailsService(this.applicationUserService) //Si no le agregamos el userDetailsService(...), al hacer login y check en remember me, nos mostrará el error ...IllegalStateException: UserDetailsService is required. (En el tutorial no le agrega eso y funciona normal)
                     .tokenValiditySeconds((int)TimeUnit.DAYS.toSeconds(21))//Cambiamos la duración del remember me a 21 días (convertidos en segundos)
                     .key("somethingVerySecured12345") //Usamos una clave propia para cifrar el token del remember me
                     .rememberMeParameter("remember-me") //Establecemos un name al input de recuérdame (default is remember-me)
@@ -86,6 +85,12 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                     .logoutSuccessUrl("/login");
     }
 
+    /**
+     * Ahora ya no usaremos este método sobreescrito UserDetailsService userDetailsServiceBean() ....
+     * sino usaremos el de nuestra propia implementación realizada en la clase ApplicationUserService,
+     * ya que esa clase implementa el UserDetailsService
+     */
+    /**
     @Override
     @Bean
     public UserDetailsService userDetailsServiceBean() throws Exception {
@@ -112,4 +117,21 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
 
         return new InMemoryUserDetailsManager(magadifloUser, millaUser, escalanteUser);
     }
+     **/
+
+    //---- Para usar la clase personalizada ApplicationUserService que implementa UserDetailsService
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.authenticationProvider(this.daoAuthenticationProvider());
+    }
+
+    @Bean
+    public DaoAuthenticationProvider daoAuthenticationProvider() {
+        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+        provider.setPasswordEncoder(this.passwordEncoder);
+        provider.setUserDetailsService(this.applicationUserService);
+        return provider;
+    }
+    //----
+
 }
