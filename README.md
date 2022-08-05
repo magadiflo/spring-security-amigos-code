@@ -3,6 +3,9 @@
 Taken from: https://www.youtube.com/watch?v=her_7pa0vrg&t=4406s   
 **Youtube Channel:** Amigoscode
 
+## Librería JWT usada en el proyecto
+[jwtk / jjwt](https://github.com/jwtk/jjwt)
+
 ### Timestamps
 00:00 INTRO   
 01:48 QUICK WORD BEFORE WE BEGIN   
