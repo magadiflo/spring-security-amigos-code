@@ -19,8 +19,10 @@ import java.util.Date;
 
 /**
  * Clase que verificará las credenciales ingresadas por el usuario.
- * Spring Security lo hace por defecto, pero nosotros sobreescribiremos
- * ese comportamiento para tener nuestra propia implementación
+ * Spring Security lo hace por defecto usando esta clase: UsernamePasswordAuthenticationFilter,
+ * pero nosotros la extendemos (JwtUsernameAndPasswordAuthenticationFilter) para sobreescribir
+ * el comportamiento de los métodos: attemptAuthentication(...), successfulAuthentication(...) y
+ * de esa forma tener nuestra propia implementación
  */
 
 public class JwtUsernameAndPasswordAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
