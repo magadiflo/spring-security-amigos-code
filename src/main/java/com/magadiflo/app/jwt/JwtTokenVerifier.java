@@ -75,6 +75,8 @@ public class JwtTokenVerifier extends OncePerRequestFilter {
             throw new IllegalStateException(String.format("Token %s cannot be truest", token));
         }
 
+        //Continuamos con la cadena de filtros
+        filterChain.doFilter(request, response);
     }
 
 }

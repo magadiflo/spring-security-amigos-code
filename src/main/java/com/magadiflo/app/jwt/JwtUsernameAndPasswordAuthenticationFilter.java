@@ -29,6 +29,9 @@ public class JwtUsernameAndPasswordAuthenticationFilter extends UsernamePassword
 
     // Inyección de dependencia obtenida por el @bean DaoAuthenticationProvider
     // de la clase ApplicationSecurityConfig (esto lo deduje realizando el debug)
+    //
+    //También se observa en el ApplicationSecurityConfig, método configure(HttpSecurity http)
+    //que se le pasa por el constructor de la instancia el authenticationManager()
     private final AuthenticationManager authenticationManager;
 
     public JwtUsernameAndPasswordAuthenticationFilter(AuthenticationManager authenticationManager) {
