@@ -133,3 +133,11 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
     //----
 
 }
+/**
+ * NOTAS RÁPIDAS SOBRE JWT
+ * ------------------------
+ * 1. Se debe proporcionar una fecha no muy larga de caducidad, ejemplo: 10 días, 7 días, etc.
+ * 2. Actualmente, un usuario puede solicitar tantos tokens como quiera. Para solucionar ese problema,
+ * cada vez que el usuario solicite un nuevo token, este se registrará en la BD y si anteriormente
+ * ya tenía registrado un token se lo invalidará
+ */
