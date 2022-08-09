@@ -1,6 +1,7 @@
 package com.magadiflo.app.security;
 
 import com.magadiflo.app.auth.ApplicationUserService;
+import com.magadiflo.app.jwt.JwtUsernameAndPasswordAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -9,6 +10,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
@@ -58,31 +60,18 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .csrf().disable()
+                .sessionManagement()
+                    .sessionCreationPolicy(SessionCreationPolicy.STATELESS) //Por que no usaremos sesiones
+                .and()
+                .addFilter(new JwtUsernameAndPasswordAuthenticationFilter(authenticationManager()))
                 .authorizeRequests()
                 .antMatchers("/", "index", "/css/*", "/js/*").permitAll() //[Lista blanca] Todas las urls que coincidan con los patrones definidos, serán permitidas (no necesitan username and password)
                 .antMatchers("/api/**").hasRole(ApplicationUserRole.STUDENT.name()) //La url que comience con /api... solo serán permitidas a los usuarios con rol STUDENT
-                .anyRequest().authenticated()
-                .and()
+                .anyRequest().authenticated();
+                //.and()
                 //.httpBasic(); //Autenticación básica (Basic Auth), si ingresamos por un navegador mostrará un alert donde se debe especificar username and password
-                .formLogin() //Autenticación basada en formularios, si ingresamos por un navegador mostrará un formulario de login en la ruta /login (cerrar sesión /logout)
-                    .loginPage("/login").permitAll() //Indica la url (/login) de la página de inicio de sesión
-                    .defaultSuccessUrl("/courses", true) //true, que sí haga forzar la redirección
-                    .passwordParameter("password")//Establecemos un name al input de contraseña (default is password)
-                    .usernameParameter("username")//Establecemos un name al input de usuario (default is username)
-                .and()
-                .rememberMe() //rememberMe(), Por defecto a 2 semanas.
-                    .userDetailsService(this.applicationUserService) //Si no le agregamos el userDetailsService(...), al hacer login y check en remember me, nos mostrará el error ...IllegalStateException: UserDetailsService is required. (En el tutorial no le agrega eso y funciona normal)
-                    .tokenValiditySeconds((int)TimeUnit.DAYS.toSeconds(21))//Cambiamos la duración del remember me a 21 días (convertidos en segundos)
-                    .key("somethingVerySecured12345") //Usamos una clave propia para cifrar el token del remember me
-                    .rememberMeParameter("remember-me") //Establecemos un name al input de recuérdame (default is remember-me)
-                .and()
-                .logout()
-                    .logoutUrl("/logout") //Url predeterminada para cerrar sesión
-                    .logoutRequestMatcher(new AntPathRequestMatcher("/logout", "GET")) //Porque deshabilitamos la protección CSRF, si la volvemos a habilitar, esta línea debe ser eliminada. Aquí le decimos, cada vez que vaya a la url "/logout" con el método GET que cierre sesión
-                    .clearAuthentication(true)
-                    .invalidateHttpSession(true)
-                    .deleteCookies("JSESSIONID", "remember-me")
-                    .logoutSuccessUrl("/login");
+                //.formLogin()...; //Autenticación basada en formularios, si ingresamos por un navegador mostrará un formulario de login en la ruta /login (cerrar sesión /logout)
+
     }
 
     /**
