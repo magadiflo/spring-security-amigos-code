@@ -1,5 +1,6 @@
 package com.magadiflo.app.security;
 
+//Se usarán en este proyecto Permissions como sinónimo de Authorities
 public enum ApplicationUserPermission {
 
     STUDENT_READ("student:read"),
