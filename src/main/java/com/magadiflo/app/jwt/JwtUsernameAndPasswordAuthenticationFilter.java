@@ -22,7 +22,12 @@ import java.util.Date;
  * Spring Security lo hace por defecto usando esta clase: UsernamePasswordAuthenticationFilter,
  * pero nosotros la extendemos (JwtUsernameAndPasswordAuthenticationFilter) para sobreescribir
  * el comportamiento de los métodos: attemptAuthentication(...), successfulAuthentication(...) y
- * de esa forma tener nuestra propia implementación
+ * de esa forma tener nuestra propia implementación.
+ *
+ * Recordar:
+ * Si ingresamos a la clase que heredamos UsernamePasswordAuthenticationFilter,
+ * veremos que la petición que se debe hacer tiene que venir con el método POST y a la url /login
+ * y además, como parámetros debe traer los campos username y password.
  */
 
 public class JwtUsernameAndPasswordAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
