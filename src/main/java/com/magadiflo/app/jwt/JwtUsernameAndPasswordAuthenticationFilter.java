@@ -27,6 +27,8 @@ import java.util.Date;
 
 public class JwtUsernameAndPasswordAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
+    // Inyección de dependencia obtenida por el @bean DaoAuthenticationProvider
+    // de la clase ApplicationSecurityConfig (esto lo deduje realizando el debug)
     private final AuthenticationManager authenticationManager;
 
     public JwtUsernameAndPasswordAuthenticationFilter(AuthenticationManager authenticationManager) {

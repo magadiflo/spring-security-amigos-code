@@ -114,6 +114,8 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
         auth.authenticationProvider(this.daoAuthenticationProvider());
     }
 
+    // Será inyectado como implementación del AuthenticationManager
+    // Un ejemplo puede verse en la clase JwtUsernameAndPasswordAuthenticationFilter
     @Bean
     public DaoAuthenticationProvider daoAuthenticationProvider() {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
