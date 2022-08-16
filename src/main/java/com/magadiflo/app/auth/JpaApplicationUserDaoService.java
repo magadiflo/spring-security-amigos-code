@@ -31,6 +31,12 @@ public class JpaApplicationUserDaoService implements ApplicationUserDao {
         if (user == null) {
             throw new UsernameNotFoundException(String.format("El usuario %s no fue encontrado en la BD", username));
         } else {
+            /**
+             * Recordar que el ApplicationUser no es nuestra entidad que se guarda en la BD, esa entidad nosotros la
+             * creamos en domain/User. En este caso el ApplicationUser es el usuario de Spring, el que maneja internamente
+             * para hacer el proceso de verificación, autenticación etc.. es por eso que nuestro ApplicationUser extiende
+             * de UserDetails, de esta manera tendremos mejor control
+             */
             return Optional.of(new ApplicationUser(this.getAuthorities(user.getRoles()),
                     user.getPassword(), user.getEmail(),
                     true, true, true, true));
