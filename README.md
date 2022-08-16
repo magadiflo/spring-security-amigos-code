@@ -124,7 +124,10 @@ El UserDetailsService se encargaría de recopilar todos los roles y todas las
 operaciones de esos roles y hacerlos disponibles mediante el método getAuthorities() 
 en la instancia UserDetails devuelta.
 
-### Timestamps
+## [Spring Security Annotations With Examples](https://javatechonline.com/spring-security-annotations/?fbclid=IwAR2G1G3rM31azpaxSgmDlnFz1kAxEkfHe9nWwQ18ftf7riNJ40-gh2tVBUI)
+Se muestra el artículo con las anotaciones usadas en Spring Security
+
+## Timestamps
 00:00 INTRO   
 01:48 QUICK WORD BEFORE WE BEGIN   
 02:33 BOOTSTRAPPING   

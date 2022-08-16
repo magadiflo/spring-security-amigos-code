@@ -17,6 +17,18 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.crypto.SecretKey;
 
+/**
+ * @EnableWebSecurity, Habilitamos el soporte de seguridad web de Spring Security. Le decimos que crearemos una clase
+ * de configuración personalizada (en nuestro caso será esta misma clase, el ApplicationSecurityConfig) donde
+ * definiremos la configuración de Spring Security
+ *
+ * @EnableGlobalMethodSecurity(
+ *    prePostEnabled = true,  // Enables @PreAuthorize and @PostAuthorize
+ *    securedEnabled = true,  // Enables @Secured
+ *    jsr250Enabled = true    // Enables @RolesAllowed (Ensures JSR-250 annotations are enabled)
+ * )
+ */
+
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true) //Para poder usar las anotaciones @PreAuthorize(...) en los métodos de las APIS
