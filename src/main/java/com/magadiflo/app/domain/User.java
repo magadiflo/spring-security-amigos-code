@@ -21,6 +21,17 @@ public class User implements Serializable {
     private boolean enabled;
     private boolean tokenExpired;
 
+    /**
+     * Por defecto, al terminar en ...Many, es del tipo LAZY.
+     * Aquí, se colocó el tipo EAGER porque en la clase JpaApplicationUserDaoService, método
+     * selectApplicationUserByUsername(...), una vez que se obtiene el usuario user desde la BD,
+     * dentro del método se trata de acceder a sus ROLES (user.getRoles()), trayendo consigo un
+     * error, puesto que la transacción ya ha finalizado. Entonces la solución que se le aplicó aquí fue
+     * esa, colocarle EAGER para que cuando haga la consulta a la BD traiga también sus roles...
+     * Otra solución que vi, es que si no queremos colocar el EAGER, sino dejarlo por defecto con LAZY es
+     * anotar en clase con @Transactional, la clase @Service, clase donde se está llamando a los roles
+     * user.getRoles() (Ver el README.md), de esa manera se obtendrán los datos de la BD DURANTE LA TRANSACCIÓN
+     */
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "users_roles",

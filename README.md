@@ -124,6 +124,14 @@ El UserDetailsService se encargaría de recopilar todos los roles y todas las
 operaciones de esos roles y hacerlos disponibles mediante el método getAuthorities() 
 en la instancia UserDetails devuelta.
 
+# Acceder a los roles del User cuando la relación es del tipo LAZY
+Para eso, en la relación de User y Role el tipo @ManyToMany, es del tipo LAZY.
+Pero, se debe anotar la clase @Service (clase donde el user está accediendo a los roles user.getRoles()) con 
+@Transactional a nivel de la clase, de esa manera se obtendrán los DATOS de la BD durante la TRANSACCIÓN  
+
+Video: [Spring Security | Curso 2022, timestamp = 1:43:46](https://www.youtube.com/watch?v=t6prPki7daU&t=3192s)  
+Repo [publicado en GitHub](https://github.com/MichelliBrito/parking-control-api/tree/security)
+
 ### Timestamps
 00:00 INTRO   
 01:48 QUICK WORD BEFORE WE BEGIN   
