@@ -36,7 +36,7 @@ public class JwtUsernameAndPasswordAuthenticationFilter extends UsernamePassword
     //que se le pasa por el constructor de la instancia el authenticationManager(), jwtConfig y el secretKey
     private final AuthenticationManager authenticationManager;
     private final JwtConfig jwtConfig;
-    private final SecretKey secretKey; //Es un @bean configurado en la clase JwtSecretKey
+    private final SecretKey secretKey;
 
     public JwtUsernameAndPasswordAuthenticationFilter(AuthenticationManager authenticationManager,
                                                       JwtConfig jwtConfig, SecretKey secretKey) {
