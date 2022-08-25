@@ -127,6 +127,35 @@ en la instancia UserDetails devuelta.
 ## [Spring Security Annotations With Examples](https://javatechonline.com/spring-security-annotations/?fbclid=IwAR2G1G3rM31azpaxSgmDlnFz1kAxEkfHe9nWwQ18ftf7riNJ40-gh2tVBUI)
 Se muestra el artículo con las anotaciones usadas en Spring Security
 
+## [What is SecurityContext and SecurityContextHolder in Spring Security?](https://javarevisited.blogspot.com/2018/02/what-is-securitycontext-and-SecurityContextHolder-Spring-security.html?fbclid=IwAR3NNeHQT1wk5PaG4nAjt2wsRC5iXJmcCjZ88d4NRe3O7w5q9QkiJ7QrmBo#ixzz6aGyiRSLO)
+**Tomado de la web Javarevisited**
+
+SecurityContext y SecurityContextHolder son dos clases fundamentales de Spring Security. 
+SecurityContext se utiliza para almacenar los detalles del usuario autenticado actualmente, 
+también conocido como Principal. Por lo tanto, si tiene que obtener el nombre de usuario o cualquier 
+otro detalle del usuario, primero debe obtener este SecurityContext. SecurityContextHolder es una clase 
+auxiliar que proporciona acceso al contexto de seguridad. De forma predeterminada, utiliza 
+un objeto ThreadLocal para almacenar el contexto de seguridad, lo que significa que el contexto 
+de seguridad siempre está disponible para métodos en el mismo subproceso de ejecución, 
+incluso si no pasa el objeto SecurityContext. Sin embargo, no se preocupe por la 
+pérdida de memoria de ThreadLocal en la aplicación web, Spring Security se encarga de limpiar ThreadLocal.  
+
+### Cómo obtener el nombre de usuario que ha iniciado sesión actualmente en Spring Security 
+Este es el código para obtener el contexto de seguridad en la seguridad de Spring y obtener 
+el nombre del usuario que ha iniciado sesión actualmente:
+```
+Object principal = SecurityContextHolder.getContext()
+                                        .getAuthentication()
+                                        .getPrincipal();
+
+if (principal instanceof UserDetails) {
+    String username = ((UserDetails)principal).getUsername();
+} else {
+    String username = principal.toString();
+}
+```
+[Para más información... leer más...](https://javarevisited.blogspot.com/2018/02/what-is-securitycontext-and-SecurityContextHolder-Spring-security.html#ixzz7d01N1ln2)
+
 ## Timestamps
 00:00 INTRO   
 01:48 QUICK WORD BEFORE WE BEGIN   
