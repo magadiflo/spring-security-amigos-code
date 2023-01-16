@@ -94,6 +94,12 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     /**
+     * UserDetailsService
+     * ******************
+     * Con este UserDetailsService es como recuperamos los usuarios de la Base de Datos.
+     *
+     * Comentando el UserDetailsService
+     * ********************************
      * Ahora ya no usaremos este método sobreescrito UserDetailsService userDetailsServiceBean() ....
      * sino usaremos el de nuestra propia implementación realizada en la clase ApplicationUserService,
      * ya que esa clase implementa el UserDetailsService
